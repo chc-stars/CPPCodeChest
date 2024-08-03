@@ -3,12 +3,20 @@
 
 #include <iostream>
 #include "src/common/utils.h"
+#include "src/common/logger.h"
 
 
 
 int main()
 {
     std::cout << "Hello World!\n";
+
+
+    Logger logger;
+
+    logger.writeLog("This is a log message.", logger.WARNING);
+    logger.writeLog("Another log message.", logger.INFO);
+    logger.writeLog("AAAAAA", logger.ERROR);
 
 }
 
