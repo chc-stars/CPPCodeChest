@@ -65,9 +65,13 @@
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="..\..\..\C++\OpenCV\Debug_x64_opencv455.props" />
+    <Import Project="Debug_x64_mysql_8.0.27.props" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="..\..\..\C++\OpenCV\Release_x64_opencv455.props" />
+    <Import Project="Debug_x64_mysql_8.0.27.props" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -130,11 +134,15 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="CPPCodeChest.cpp" />
+    <ClCompile Include="src\algorithms\nms.cpp" />
     <ClCompile Include="src\common\logger.cpp" />
+    <ClCompile Include="src\common\mysqlDB.cpp" />
     <ClCompile Include="src\common\utils.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\algorithms\nms.h" />
     <ClInclude Include="src\common\logger.h" />
+    <ClInclude Include="src\common\mysqlDB.h" />
     <ClInclude Include="src\common\utils.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

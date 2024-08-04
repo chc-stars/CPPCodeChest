@@ -50,6 +50,7 @@ void Logger::writeLog(const std::string& message, LoggerType logType) {
     }
 
     logFile << ss.str();
+
 }
 
 std::string Logger::createLogFileName() {
@@ -57,7 +58,8 @@ std::string Logger::createLogFileName() {
     auto in_time_t = std::chrono::system_clock::to_time_t(now);
 
     std::stringstream ss;
-    ss << std::put_time(std::localtime(&in_time_t), "log_%Y-%m-%d_%H-%M.log");
+    ss << std::put_time(std::localtime(&in_time_t), "log_%Y-%m-%d_%H.log");
+   // ss << std::put_time(std::localtime(&in_time_t), "log_%Y-%m-%d_%H-%M%.log");
 
     return ss.str();
 }

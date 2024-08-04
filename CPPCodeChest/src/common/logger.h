@@ -8,6 +8,8 @@
 #include <chrono>
 #include <ctime>
 
+// C++: ÈÕÖ¾º¯Êı.
+
 class Logger {
 public:
     Logger();

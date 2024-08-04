@@ -30,12 +30,24 @@
     <ClCompile Include="src\common\logger.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="src\algorithms\nms.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\common\mysqlDB.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\common\utils.h">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="src\common\logger.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\common\mysqlDB.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\algorithms\nms.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
