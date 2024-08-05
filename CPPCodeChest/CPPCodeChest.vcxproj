@@ -68,6 +68,7 @@
     <Import Project="..\..\..\C++\OpenCV\Debug_x64_opencv455.props" />
     <Import Project="..\..\..\C++\3rdparty\Debug_x64_Yaml-Cpp.props" />
     <Import Project="..\..\..\C++\3rdparty\Debug_Release_x64_mysql_8.0.27.props" />
+    <Import Project="..\..\..\C++\PCL\PCL1.12.1_Debug_x64.props" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
@@ -150,6 +151,7 @@
     <ClCompile Include="src\common\parseYamlFile.cpp" />
     <ClCompile Include="src\common\utils.cpp" />
     <ClCompile Include="src\cv\utils.cpp" />
+    <ClCompile Include="src\pcl\utils.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\algorithms\nms.h" />
@@ -158,6 +160,7 @@
     <ClInclude Include="src\common\parseYamlFile.h" />
     <ClInclude Include="src\common\utils.h" />
     <ClInclude Include="src\cv\utils.h" />
+    <ClInclude Include="src\pcl\utils.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
