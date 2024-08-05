@@ -1,6 +1,9 @@
 #pragma once
 #include <iostream>
+#include <filesystem>
 
 
-int add(int a, int b);
+bool ensureFileExists(const std::string& filePath);
+
+
 

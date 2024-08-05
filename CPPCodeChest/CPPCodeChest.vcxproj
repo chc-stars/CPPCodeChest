@@ -149,6 +149,7 @@
     <ClCompile Include="src\common\mysqlDB.cpp" />
     <ClCompile Include="src\common\parseYamlFile.cpp" />
     <ClCompile Include="src\common\utils.cpp" />
+    <ClCompile Include="src\cv\utils.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\algorithms\nms.h" />
@@ -156,6 +157,7 @@
     <ClInclude Include="src\common\mysqlDB.h" />
     <ClInclude Include="src\common\parseYamlFile.h" />
     <ClInclude Include="src\common\utils.h" />
+    <ClInclude Include="src\cv\utils.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

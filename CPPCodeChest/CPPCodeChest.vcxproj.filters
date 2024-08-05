@@ -39,6 +39,9 @@
     <ClCompile Include="src\common\parseYamlFile.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="src\cv\utils.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\common\utils.h">
@@ -54,6 +57,9 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="src\common\parseYamlFile.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\cv\utils.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
