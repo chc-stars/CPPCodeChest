@@ -2,6 +2,7 @@
 //
 
 #include <iostream>
+#include <chrono>
 
 #include "src/common/utils.h"
 #include "src/common/logger.h"
@@ -10,7 +11,21 @@
 
 int main()
 {
-    std::cout << "Hello World!\n";
+  
+    // 获取当前时间点
+    auto start = std::chrono::high_resolution_clock::now();
+
+
+
+
+
+
+    // 获取当前时间点
+    auto end = std::chrono::high_resolution_clock::now();
+
+    // 计算时间差
+    std::chrono::duration<double> duration = end - start;
+    std::cout << "Time taken: " << duration.count() << " seconds" << std::endl;
 
 }
 
