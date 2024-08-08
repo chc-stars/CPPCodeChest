@@ -152,6 +152,8 @@
     <ClCompile Include="src\common\utils.cpp" />
     <ClCompile Include="src\cv\utils.cpp" />
     <ClCompile Include="src\pcl\utils.cpp" />
+    <ClCompile Include="src\thread\thread.cpp" />
+    <ClCompile Include="src\thread\threadPool.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\algorithms\nms.h" />
@@ -161,6 +163,8 @@
     <ClInclude Include="src\common\utils.h" />
     <ClInclude Include="src\cv\utils.h" />
     <ClInclude Include="src\pcl\utils.h" />
+    <ClInclude Include="src\thread\thread.h" />
+    <ClInclude Include="src\thread\threadPool.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
