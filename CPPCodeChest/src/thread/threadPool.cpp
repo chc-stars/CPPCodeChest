@@ -42,14 +42,13 @@ bool threadPool<T>::append(T* request)
 }
 
 // µ¥Ïß³Ì
+ 
 
 template <typename T>
 void threadPool<T>::worker(void* arg)
 {
-    threadPool* pool_;
-    pool_= (threadPool*)arg;
+    threadPool<T>* pool_ = static_cast<threadPool<T>*>(arg);
     pool_->run();
- 
 }
 
 template <typename T>
