@@ -83,5 +83,8 @@
     <ClInclude Include="src\thread\threadPool.hpp">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="src\cplusplus\StdString.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

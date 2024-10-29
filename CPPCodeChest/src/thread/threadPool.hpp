@@ -36,7 +36,7 @@ private:
 
  ThreadPool:: ThreadPool(int threadnums) :isstop(false)
 {
-	 for (rsize_t i = 0; i < threadnums; i++) {
+	 for (size_t i = 0; i < threadnums; i++) {
 		 workers.emplace_back([this]() {
 			this->worker();
 			});
