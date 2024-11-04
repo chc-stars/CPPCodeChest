@@ -86,5 +86,17 @@
     <ClInclude Include="src\cplusplus\StdString.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="src\cplusplus\OOP.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\cplusplus\smartPointer.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\cplusplus\lambda_.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\cplusplus\CPP_FUNC_API.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
