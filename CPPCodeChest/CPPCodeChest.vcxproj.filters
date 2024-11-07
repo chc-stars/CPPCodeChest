@@ -98,5 +98,8 @@
     <ClInclude Include="src\cplusplus\CPP_FUNC_API.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="src\cplusplus\callbackFunc.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

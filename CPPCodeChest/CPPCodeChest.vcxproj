@@ -161,6 +161,7 @@
     <ClInclude Include="src\common\mysqlDB.h" />
     <ClInclude Include="src\common\parseYamlFile.h" />
     <ClInclude Include="src\common\utils.h" />
+    <ClInclude Include="src\cplusplus\callbackFunc.h" />
     <ClInclude Include="src\cplusplus\CPP_FUNC_API.h" />
     <ClInclude Include="src\cplusplus\lambda_.h" />
     <ClInclude Include="src\cplusplus\OOP.h" />
