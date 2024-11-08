@@ -101,5 +101,8 @@
     <ClInclude Include="src\cplusplus\callbackFunc.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="src\cplusplus\StdMutex.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

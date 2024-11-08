@@ -164,6 +164,7 @@
     <ClInclude Include="src\cplusplus\callbackFunc.h" />
     <ClInclude Include="src\cplusplus\CPP_FUNC_API.h" />
     <ClInclude Include="src\cplusplus\lambda_.h" />
+    <ClInclude Include="src\cplusplus\StdMutex.h" />
     <ClInclude Include="src\cplusplus\OOP.h" />
     <ClInclude Include="src\cplusplus\smartPointer.h" />
     <ClInclude Include="src\cplusplus\StdString.h" />

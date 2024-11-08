@@ -12,6 +12,26 @@
 *    4）配置和初始化：在配置和初始化过程中，回调函数可以用在完成某些操作后执行特定的逻辑。
 *    5）插件和扩展：在插件和扩展中，回调函数用于扩展系统的功能。
 * 
+* 3、std::promise 和 std::future的作用：
+*    std：：promise 用于设置一个未来的值。
+     std::future用与获取这个值，并且可以用来等待这个值的设置。
+
+	 阻塞等待：
+	 当你在主线程中调用std::future::get 方法时，如果std::promise的值还没有被设置，get方法会阻塞，
+	 直到std::promise的值被设置。 一旦std::promise的值被设置，get方法会返回该值，主线程继续执行。
+	 例：
+	 
+	 // 启动异步并获得future
+	  std::future<int> future = sender.startOperation(receiver.getCallbacks());
+	 
+	 // 主线程继续执行
+     std::cout << "主线程继续执行..." << std::endl;
+
+	  // 等待异步操作完成
+	 int result = future.get();
+	 std::cout << "异步操作完成，结果: " << result << std::endl;
+
+
 * 示例：回调函数可以用于两个类之间实现通信。
         通过将一个类的方法作为回调函数传递给另一个类。
 * 
