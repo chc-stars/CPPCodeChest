@@ -7,6 +7,7 @@
 #include <string>
 #include <chrono>
 #include <ctime>
+#include <filesystem>  // C++17及以上标准，用于文件系统操作
 
 // C++: 日志函数.
 

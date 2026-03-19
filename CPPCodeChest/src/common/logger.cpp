@@ -1,5 +1,7 @@
 #include "logger.h"
 
+namespace fs = std::filesystem;  // 简化命名空间
+
 Logger::Logger()
     : logFile(createLogFileName(), std::ios::out | std::ios::app) {
     if (!logFile.is_open()) {
@@ -53,13 +55,26 @@ void Logger::writeLog(const std::string& message, LoggerType logType) {
 
 }
 
+
 std::string Logger::createLogFileName() {
+    
     auto now = std::chrono::system_clock::now();
     auto in_time_t = std::chrono::system_clock::to_time_t(now);
 
+    // 定义Log文件夹路径（运行目录下的Log文件夹）
+
     std::stringstream ss;
-    ss << std::put_time(std::localtime(&in_time_t), "log_%Y-%m-%d_%H.log");
-   // ss << std::put_time(std::localtime(&in_time_t), "log_%Y-%m-%d_%H-%M%.log");
+    const std::string logDir = "Log";
+    try {
+        fs::create_directories(logDir);
+        ss << std::put_time(std::localtime(&in_time_t), "./Log/log_%Y-%m-%d_%H.log");
+
+    }
+    catch (const fs::filesystem_error& e) {
+        std::cerr << "创建Log文件夹失败,文件存放于运行根目录下：" << e.what() << std::endl;
+        ss << std::put_time(std::localtime(&in_time_t), "/log_%Y-%m-%d_%H.log");
+
+    }
 
     return ss.str();
 }
