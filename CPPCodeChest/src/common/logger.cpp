@@ -1,80 +1,225 @@
-#include "logger.h"
+#include "Logger.h"
+#include <sys/stat.h>
 
-namespace fs = std::filesystem;  // 简化命名空间
+#ifdef  _WIN32
+#include <direct.h>
+#else
+#include <sys/stat.h>  
+#endif //  _WIN32
+
+
+
+Logger& Logger::getInstance() {
+    static Logger instance;
+    return instance;
+}
 
 Logger::Logger()
-    : logFile(createLogFileName(), std::ios::out | std::ios::app) {
-    if (!logFile.is_open()) {
-        std::cerr << "Failed to open log file." << std::endl;
-        exit(EXIT_FAILURE);
-    }
-    std::stringstream ss;
-    ss << "********************************************" << "\n";
-    logFile << ss.str();
+    : m_level(LogLevel::Debug)
+    , m_consoleOutput(true)
+    , m_logName("") {
+    m_logFilePath = "log.txt";
+    m_fileStream.open(m_logFilePath, std::ios::out | std::ios::app);
 }
 
 Logger::~Logger() {
-    logFile.close();
+    if (m_fileStream.is_open()) {
+        m_fileStream.close();
+    }
 }
 
-void Logger::writeLog(const std::string& message, LoggerType logType) {
-    auto t = std::time(nullptr);
-    auto tm = *std::localtime(&t);
+void Logger::setLevel(LogLevel level) {
+    std::lock_guard<std::mutex> lock(m_mutex);
+    m_level = level;
+}
 
-    std::stringstream ss;
+void Logger::setConsoleOutput(bool enable) {
+    std::lock_guard<std::mutex> lock(m_mutex);
+    m_consoleOutput = enable;
+}
 
-    switch (logType)
-    {
-        case LoggerType::INFO:
-            ss << std::put_time(&tm, "%Y-%m-%d %H:%M:%S") << " [INFO]: "  << message << "\n";
-            break;
-        case LoggerType::WARNING:
-            ss << std::put_time(&tm, "%Y-%m-%d %H:%M:%S") << " [WARNING]: " << message << "\n";
-            break;
-        case LoggerType::DEBUG:
-            ss << std::put_time(&tm, "%Y-%m-%d %H:%M:%S") << " [DEBUG]: " << message << "\n";
-            break;
-        case LoggerType::ERROR:
-            ss << std::put_time(&tm, "%Y-%m-%d %H:%M:%S") << " [ERROR]: " << message << "\n";
-            break;
-        case LoggerType::FATAL:
-            ss << std::put_time(&tm, "%Y-%m-%d %H:%M:%S") << " [FATAL]: " << message << "\n";
-            break;
-        case LoggerType::PERFORMANCE:
-            ss << std::put_time(&tm, "%Y-%m-%d %H:%M:%S") << " [PERFORMANCE]: " << message << "\n";
-            break;
-        case LoggerType::SECURITY:
-            ss << std::put_time(&tm, "%Y-%m-%d %H:%M:%S") << " [SECURITY]: " << message << "\n";
-            break;
-        default:
-            ss << std::put_time(&tm, "%Y-%m-%d %H:%M:%S") << "[INFO]: " << message << "\n";
-            break;
+void Logger::setLogName(const std::string& name) {
+    std::lock_guard<std::mutex> lock(m_mutex);
+    m_logName = name;
+}
+
+void Logger::setLogPath(const std::string& path)
+{
+    std::lock_guard<std::mutex> lock(m_mutex);
+    createDirectory(path);
+
+    m_logFilePath = path + "/" + generateLogFileName();
+
+    if (m_fileStream.is_open()) {
+        m_fileStream.close();
     }
 
-    logFile << ss.str();
+    m_fileStream.open(m_logFilePath, std::ios::out | std::ios::app);
+    if (!m_fileStream.is_open()) {
+        std::cerr << "Failed to open log file: " << m_logFilePath << std::endl;
+    }
 
 }
 
+void Logger::createDirectory(const std::string& path) {
+#ifdef _WIN32
+    if (_mkdir(path.c_str()) == 0 || errno == EEXIST) {
+        // 目录创建成功或已存在
+    }
+#else
+    if (mkdir(path.c_str(), 0755) == 0 || errno == EEXIST) {
+        // 目录创建成功或已存在
+    }
+#endif
+}
 
-std::string Logger::createLogFileName() {
-    
+
+std::string Logger::generateLogFileName() {
     auto now = std::chrono::system_clock::now();
-    auto in_time_t = std::chrono::system_clock::to_time_t(now);
+    auto time_t = std::chrono::system_clock::to_time_t(now);
+    auto ms = std::chrono::duration_cast<std::chrono::milliseconds>(
+        now.time_since_epoch()) % 1000;
 
-    // 定义Log文件夹路径（运行目录下的Log文件夹）
+    std::tm tm;
+#ifdef _WIN32
+    localtime_s(&tm, &time_t);
+#else
+    localtime_r(&time_t, &tm);
+#endif
 
-    std::stringstream ss;
-    const std::string logDir = "Log";
-    try {
-        fs::create_directories(logDir);
-        ss << std::put_time(std::localtime(&in_time_t), "./Log/log_%Y-%m-%d_%H.log");
+    std::ostringstream oss;
+    oss << "VisionLog"
+        << std::put_time(&tm, "%Y-%m-%d_%H-%M-%S")  // 注意：这里用 - 而不是 _ 避免 Windows 文件名问题
+        << "_" << std::setfill('0') << std::setw(3) << ms.count()
+        << ".log";
 
+    return oss.str();
+}
+
+void Logger::setLogFile(const std::string& filePath) {
+    std::lock_guard<std::mutex> lock(m_mutex);
+
+    if (m_fileStream.is_open()) {
+        m_fileStream.close();
     }
-    catch (const fs::filesystem_error& e) {
-        std::cerr << "创建Log文件夹失败,文件存放于运行根目录下：" << e.what() << std::endl;
-        ss << std::put_time(std::localtime(&in_time_t), "/log_%Y-%m-%d_%H.log");
 
+    m_logFilePath = filePath;
+    m_fileStream.open(m_logFilePath, std::ios::out | std::ios::app);
+}
+
+int Logger::getThreadId() {
+#ifdef _WIN32
+    return GetCurrentThreadId();
+#else
+    return std::hash<std::thread::id>{}(std::this_thread::get_id());
+#endif
+}
+
+std::string Logger::getCurrentTime() {
+    auto now = std::chrono::system_clock::now();
+    auto time_t = std::chrono::system_clock::to_time_t(now);
+    auto ms = std::chrono::duration_cast<std::chrono::milliseconds>(
+        now.time_since_epoch()) % 1000;
+
+    std::tm tm;
+#ifdef _WIN32
+    localtime_s(&tm, &time_t);
+#else
+    localtime_r(&time_t, &tm);
+#endif
+
+    std::ostringstream oss;
+    oss << std::put_time(&tm, "%Y-%m-%d %H:%M:%S")
+        << "." << std::setfill('0') << std::setw(3) << ms.count();
+
+    return oss.str();
+}
+
+std::string Logger::levelToString(LogLevel level) {
+    switch (level) {
+    case LogLevel::Debug: return "DEBUG";
+    case LogLevel::Info:  return "INFO";
+    case LogLevel::Warn:  return "WARN";
+    case LogLevel::Error: return "ERROR";
+    default:              return "UNKN";
+    }
+}
+
+void Logger::write(LogLevel level, const std::string& message) {
+    if (level < m_level) {
+        return;
     }
 
-    return ss.str();
+    std::lock_guard<std::mutex> lock(m_mutex);
+
+    // 格式：[线程ID] 时间 [级别]: 消息[日志名称]
+    // 示例：[46108] 2026-04-12 12:19:37.774 [INFO]: 设置mtp日志输出OK![VisionLog]
+    std::ostringstream formatted;
+    formatted << "[" << getThreadId() << "] "
+        << getCurrentTime() << " ["
+        << levelToString(level) << "]: "
+        << message;
+
+    // 如果有日志名称，追加到末尾
+    if (!m_logName.empty()) {
+        formatted << m_logName;
+    }
+
+    std::string output = formatted.str();
+
+    // 写入文件
+    if (m_fileStream.is_open()) {
+        m_fileStream << output << std::endl;
+        m_fileStream.flush();
+    }
+
+    // 输出到控制台
+    if (m_consoleOutput) {
+        if (level == LogLevel::Error) {
+            std::cerr << output << std::endl;
+        }
+        else {
+            std::cout << output << std::endl;
+        }
+    }
+}
+
+void Logger::debug(const std::string& message) {
+    write(LogLevel::Debug, message);
+}
+
+void Logger::info(const std::string& message) {
+    write(LogLevel::Info, message);
+}
+
+void Logger::warn(const std::string& message) {
+    write(LogLevel::Warn, message);
+}
+
+void Logger::error(const std::string& message) {
+    write(LogLevel::Error, message);
+}
+
+Logger::LogStream::LogStream(Logger& logger, LogLevel level)
+    : m_logger(logger), m_level(level) {
+}
+
+Logger::LogStream::~LogStream() {
+    m_logger.write(m_level, m_stream.str());
+}
+
+Logger::LogStream Logger::debug() {
+    return LogStream(*this, LogLevel::Debug);
+}
+
+Logger::LogStream Logger::info() {
+    return LogStream(*this, LogLevel::Info);
+}
+
+Logger::LogStream Logger::warn() {
+    return LogStream(*this, LogLevel::Warn);
+}
+
+Logger::LogStream Logger::error() {
+    return LogStream(*this, LogLevel::Error);
 }

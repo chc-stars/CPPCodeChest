@@ -17,40 +17,54 @@
 
 #include "src/cplusplus/CPP_FUNC_API.h"
 
+#include <iostream>
+ 
 
+int main() {
+    ThreadPool mypool(4);
 
-
-int main()
-{
-
-	Logger logger;
-	logger.writeLog("Starting the application...", Logger::LoggerType::INFO);
-    
-    //// 获取当前时间点
-    //auto start = std::chrono::high_resolution_clock::now();
-
-
-    //    // 创建多个线程
-    //    std::vector<std::thread> threads;
-    //    for (int i = 0; i < 10; ++i) {
-    //        threads.emplace_back(incrementCounter, i);
-    //    }
-
-    //    // 等待所有线程完成
-    //    for (auto& t : threads) {
-    //        t.join();
-    //    }
-
-    //    // 输出最终的共享计数器值
-    //    std::cout << "Final value of sharedCounter: " << sharedCounter << std::endl;
-
-    //// 获取当前时间点
-    //auto end = std::chrono::high_resolution_clock::now();
-
-    //// 计算时间差
-    //std::chrono::duration<double> duration = end - start;
-    //std::cout << "Time taken: " << duration.count() << " seconds" << std::endl;
-
+    for (rsize_t i = 0; i < 20; i++) {
+   	 auto rsfuture0 = mypool.enques([](int a, int b)->int {
+   		 std::cout << "当前线程： " << std::this_thread::get_id() << std::endl;
+   		 return a + b; }, 10 * i, 10 * i);
+   	 std::cout << "thread rs:" << rsfuture0.get() << std::endl;
+    }
 }
+
+//
+//int main()
+//{
+//
+//	Logger logger;
+//	logger.writeLog("Starting the application...", Logger::LoggerType::INFO);
+//
+//
+//    
+//    //// 获取当前时间点
+//    //auto start = std::chrono::high_resolution_clock::now();
+//
+//
+//    //    // 创建多个线程
+//    //    std::vector<std::thread> threads;
+//    //    for (int i = 0; i < 10; ++i) {
+//    //        threads.emplace_back(incrementCounter, i);
+//    //    }
+//
+//    //    // 等待所有线程完成
+//    //    for (auto& t : threads) {
+//    //        t.join();
+//    //    }
+//
+//    //    // 输出最终的共享计数器值
+//    //    std::cout << "Final value of sharedCounter: " << sharedCounter << std::endl;
+//
+//    //// 获取当前时间点
+//    //auto end = std::chrono::high_resolution_clock::now();
+//
+//    //// 计算时间差
+//    //std::chrono::duration<double> duration = end - start;
+//    //std::cout << "Time taken: " << duration.count() << " seconds" << std::endl;
+//
+//}
 
 
